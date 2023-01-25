@@ -8,7 +8,10 @@ export function fetchRoomList() {
   return http.httpGet('/api/room/room/getRoomList?pageNo=1&pageSize=2')
 }
 
-// export async function fetchRyderList() {
-//   await airbnbDb.openStore('room', 'id', ['Ryder', 'test'])
-//   await airbnbDb.getList('room')
-// }
+export async function fetchRyderList() {
+  await airbnbDb.openStore('room', 'id', ['Ryder', 'test'])
+  const result = await airbnbDb.getList('room').then((res)=>{
+    return { code:'200', message:'操作成功', result:res, success:true }
+  })
+  return result
+}
