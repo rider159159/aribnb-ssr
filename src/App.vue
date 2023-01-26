@@ -2,9 +2,10 @@
 import en from 'element-plus/dist/locale/en.mjs'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 
+const route = useRoute()
 const locale = ref(en)
-console.log(useI18n)
 const { locale: localeLanguage } = useI18n()
 
 const changeLang = (language: any) => {
@@ -15,8 +16,11 @@ const changeLang = (language: any) => {
 
 <template>
   <el-config-provider :locale="locale">
-    <HeaderCommon @changeLang="changeLang"></HeaderCommon>
-    <router-view></router-view>
+    <HeaderCommon v-show="route.fullPath.indexOf('login') === -1" @changeLang="changeLang"></HeaderCommon>
+    <div class="container">
+      <router-view></router-view>
+    </div>
+    <FooterCommon v-show="route.fullPath.indexOf('login') === -1"></FooterCommon>
   </el-config-provider>
 </template>
 
