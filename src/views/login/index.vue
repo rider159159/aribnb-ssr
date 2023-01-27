@@ -1,15 +1,21 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { userSignApi, userLoginApi } from '@/api/login'
+import { ref, reactive, getCurrentInstance } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { IResultOr } from '@/api/interface'
+import { useRouter } from 'vue-router'
+
+const { proxy }: any = getCurrentInstance()
+const { t } = useI18n()
+const router = useRouter()
+const activeName = ref('login')
+const loginText = ref(t('login.loginBtn'))
+
 interface IRuleForm {
   mobile: string,
   password: string
 }
 
-const { t } = useI18n()
-
-const activeName = ref('login')
-const loginText = ref(t('login.loginBtn'))
 const ruleFormRef = ref()
 const ruleForm: IRuleForm = reactive({
   mobile: '',
@@ -47,12 +53,40 @@ function handleClick(e: any) {
 function submitForm() {
   ruleFormRef.value.validate((valid: any) => {
     if (valid) {
-      alert('成功')
+      activeName.value === 'sign' ? userSign(ruleForm) : userLogin(ruleForm)
     } else {
       return false
     }
   })
 }
+
+// 註冊街口
+function userSign(params:IRuleForm) {
+  userSignApi(params).then((res: IResultOr) => {
+    const { success, message } = res
+    if (success) {
+      proxy.$message.success(message)
+    } else {
+      proxy.$message.error(message)
+    }
+  })
+}
+
+// 註冊登入
+function userLogin(params:IRuleForm) {
+  userLoginApi(params).then((res: IResultOr) => {
+    const { success, message, result } = res
+    const { status } = result
+    if (success) {
+      localStorage.setItem('userStatus', status)
+      proxy.$message.success(message)
+      router.push({ name: 'home' })
+    } else {
+      proxy.$message.error(message)
+    }
+  })
+}
+
 </script>
 
 <template>
