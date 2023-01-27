@@ -1,88 +1,30 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { userSignApi, userLoginApi } from '@/api/login'
-import { ref, reactive, getCurrentInstance } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { IResultOr } from '@/api/interface'
+
 import { useRouter } from 'vue-router'
+import useFormProperties from '@/composables/login/useFormProperties'
+import useFormOperates from '@/composables/login/useFormOperates'
 
-const { proxy }: any = getCurrentInstance()
-const { t } = useI18n()
 const router = useRouter()
-const activeName = ref('login')
-const loginText = ref(t('login.loginBtn'))
-
-interface IRuleForm {
-  mobile: string,
-  password: string
-}
-
-const ruleFormRef = ref()
-const ruleForm: IRuleForm = reactive({
-  mobile: '',
-  password: ''
-})
-const rules = reactive({
-  mobile: [
-    {
-      required: true,
-      min: 11,
-      max: 11,
-      message: t('login.placeMobile'),
-      trigger: 'blur'
-    }
-  ],
-  password: [
-    {
-      required: true,
-      message: t('login.placePass'),
-      trigger: 'blur'
-    }
-  ]
-})
+const { t } = useI18n()
+const { ruleForm, loginText, ruleFormRef, activeName, rules } = useFormProperties(t)
+const { userSign, userLogin } = useFormOperates(router, ruleForm)
 function handleClick(e: any) {
-  console.log(e)
-  const { name, label } = e.props
-  if (name === 'login') {
-    loginText.value = t('login.loginBtn')
-  } else if (name === 'sign') {
-    loginText.value = t('login.signBtn')
-  }
-  console.log(name, label)
+  const { name } = e.props
+  loginText.value = t(`login['${name}Btn']`)
 }
 
 function submitForm() {
   ruleFormRef.value.validate((valid: any) => {
     if (valid) {
-      activeName.value === 'sign' ? userSign(ruleForm) : userLogin(ruleForm)
+      if (activeName.value === 'sign') {
+        userSign(ruleFormRef)
+      } else if (activeName.value === 'login') {
+        userLogin(ruleFormRef)
+      }
     } else {
       return false
-    }
-  })
-}
-
-// 註冊街口
-function userSign(params:IRuleForm) {
-  userSignApi(params).then((res: IResultOr) => {
-    const { success, message } = res
-    if (success) {
-      proxy.$message.success(message)
-    } else {
-      proxy.$message.error(message)
-    }
-  })
-}
-
-// 註冊登入
-function userLogin(params:IRuleForm) {
-  userLoginApi(params).then((res: IResultOr) => {
-    const { success, message, result } = res
-    const { status } = result
-    if (success) {
-      localStorage.setItem('userStatus', status)
-      proxy.$message.success(message)
-      router.push({ name: 'home' })
-    } else {
-      proxy.$message.error(message)
     }
   })
 }
