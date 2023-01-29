@@ -1,14 +1,15 @@
-
-import { http } from "../utils/http";
+// https://service-ase3oocp-1302839645.sh.apigw.tencentcs.com/api/room/room/getRoomList?pageNo=1&pageSize=3
+import { http } from '../utils/http'
 import airbnb from '../db'
 
+// 真实接口
 export function fetchRoomList() {
-  return http.httpGet('/api/room/room/getRoomList?pageNo=1&pageSize=2')
+  return http.httpRequestGet('https://service-ase3oocp-1302839645.sh.apigw.tencentcs.com/api/room/room/getRoomList?pageNo=1&pageSize=3', {})
 }
-
-export async function fetchRyderList() {
-  await airbnb.airbnbDB.openStore({ Ryder: { keyPath: 'id', indexs: ['nose', 'ear'] } })
-  const result = await airbnb.airbnbDB.getList('Ryder').then(res => {
+// Mock接口
+export async function fetchElephant() {
+  await airbnb.airbnbDB.openStore({ elephant: { keyPath: 'id', indexs: ['nose', 'ear'] } })
+  const result = await airbnb.airbnbDB.getList('elephant').then(res => {
     return { code: '000000', message: '操作成功', result: res, success: true }
   })
   return result

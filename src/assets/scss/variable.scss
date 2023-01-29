@@ -7,11 +7,13 @@ $orange:rgba(255, 81, 0, 0.842);
   white-space: nowrap;
 }
 
+// 主体基本样式
 @mixin main-wapper {
   width: 1080px;
   margin:0 auto;
 }
 
+// flex布局
 @mixin  flex-layout($dir:column,$justify:center,$align:center){
   display: flex;
   flex-direction: $dir;

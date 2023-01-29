@@ -1,11 +1,13 @@
-import TypeObjectStore from "../type";
+import TypeObjectStore from '../type' // 引入类型别名
 
-const webUser: TypeObjectStore = {
-  keyPath:'userId',
-  indexs:['mobile','password','status']
+const webUser: TypeObjectStore =
+{
+  keyPath: 'userId',
+  indexs: ['mobile', 'password', 'status']
 }
 
-const userObjectStore  = {
+const userObjectStore =
+{
   web_user: webUser
 }
 

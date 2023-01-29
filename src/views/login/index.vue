@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 
@@ -19,9 +18,9 @@ function submitForm() {
   ruleFormRef.value.validate((valid: any) => {
     if (valid) {
       if (activeName.value === 'sign') {
-        userSign(ruleFormRef)
+        userSign()
       } else if (activeName.value === 'login') {
-        userLogin(ruleFormRef)
+        userLogin()
       }
     } else {
       return false

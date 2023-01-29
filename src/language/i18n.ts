@@ -4,11 +4,9 @@ import en from './en'
 
 const i18n = createI18n({
   locale: 'zh',
-  legacy: false,
-  messages:{
+  messages: {
     zh,
     en
   }
 })
-
 export default i18n

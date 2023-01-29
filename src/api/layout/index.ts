@@ -13,9 +13,6 @@ export async function saveLanguageApi(lang: any) {
     background: 'rgba(0, 0, 0, 0.1)'
   })
   const resultOr: IResultOr = await airbnb.airbnbDB.getItem(storeName, 1).then(res => {
-    setTimeout(() => {
-      loading.close()
-    }, 200)
     return { code: '000000', message: '操作成功', result: res || null, success: true }
   })
   const { success } = resultOr
@@ -26,6 +23,9 @@ export async function saveLanguageApi(lang: any) {
     obj = { name: lang }
   }
   const result: IResultOr = await airbnb.airbnbDB.updateItem(storeName, obj).then(res => {
+    setTimeout(() => {
+      loading.close()
+    }, 200)
     return { code: '000000', message: '操作成功', result: null, success: true }
   })
   return result
@@ -40,7 +40,7 @@ export async function fetchLanguageApi() {
   const result: IResultOr = await airbnb.airbnbDB.getItem(storeName, 1).then(res => {
     setTimeout(() => {
       loading.close()
-    }, 20)
+    }, 200)
     return { code: '000000', message: '操作成功', result: res || null, success: true }
   })
   return result
